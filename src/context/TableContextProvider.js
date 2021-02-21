@@ -1,3 +1,4 @@
+import React,{Component} from 'react';
 import TableContext from "./TableContext";
 import { validLaunchFilterCheck } from "../lib/util";
 import {LAUNCH_FILTERS} from '../lib/constants';
@@ -54,12 +55,16 @@ else
 return {}
   }
   setLaunchFilter = async () => {
-    let launchVal = URLSearchParams.get("launch");
+      let url = new URL(window.location);
+    let launchVal = url.searchParams.get("launch");
+    console.log(launchVal)
 
     if (launchVal) {
       let parsedVal = parseInt(launchVal);
       if (validLaunchFilterCheck(parsedVal)) {
-        this.setState({ launchFilter: parseInt(launchVal) });
+        this.setState({ launchFilter: parseInt(launchVal) },()=>{
+            console.log(this.state.launchFilter);
+        });
       }
     }
   };
@@ -87,6 +92,9 @@ return {}
     });
   };
 
+  componentDidMount(){
+      this.loadState();
+  }
   render() {
     return (
       <TableContext.Provider value={{        data:this.state.data,
