@@ -6,9 +6,6 @@ import TableContextProvider from "../context/TableContextProvider";
 import axios from "axios";
 export default function Home(props) {
   React.useEffect(() => {
-    // axios.get('https://api.spacexdata.com/v3/launches').then(res=>{
-    //     console.log(res.data);
-    // })
   });
   return (
     <TableContextProvider>
