@@ -1,0 +1,19 @@
+#header{
+
+    width: 1440px;
+    height: 72px;
+    /* left: 0px;
+    position: absolute;
+    top: 0px; */
+display: flex;
+justify-content: center;
+align-items: center;
+box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+}
+#headerLogo{
+    /* position: relative; */
+    height:32px;
+
+
+}
+
