@@ -25,9 +25,8 @@ class TableProvider extends Component {
     const optionsObj = {
       limit: this.state.pageSize,
       offset: this.state.pageSize * (this.state.pageNo - 1),
-      populate:["launchpad","payloads","rocket"]
+      populate:["launchpad","payloads","rocket","ships"]
     };
-    console.log(queryObj);
     axios
       .post("https://api.spacexdata.com/v4/launches/query", {
         query: queryObj,
@@ -35,7 +34,6 @@ class TableProvider extends Component {
       })
       .then((res) => {
         if (res.data.docs.length > 0) {
-          console.log(res.data)
           this.setState({
             data: res.data.docs,
             totalDocs:res.data.totalDocs
@@ -64,13 +62,11 @@ class TableProvider extends Component {
   setLaunchFilter = async () => {
     let url = new URL(window.location);
     let launchVal = url.searchParams.get("launch");
-    console.log(launchVal);
 
     if (launchVal) {
       let parsedVal = parseInt(launchVal);
       if (validLaunchFilterCheck(parsedVal)) {
         this.setState({ launchFilter: parseInt(launchVal) }, () => {
-          console.log(this.state.launchFilter);
         });
       }
     }

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import TableContext from "../../context/TableContext";
 import moment from "moment";
 import { withStyles, createStyles, makeStyles } from "@material-ui/core/styles";
@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@material-ui/core";
 import ChipHOC from "../chip/chip";
+import InfoModal from "../InfoModal/InfoModal";
 import Spinner from "assets/svg/Spinner.svg";
 import "./Table.css";
 const StyledTableCell = withStyles((theme) =>
@@ -18,40 +19,18 @@ const StyledTableCell = withStyles((theme) =>
     head: {
       backgroundColor: "lightgray",
       fontSize: 12,
-      padding: "12px",
+      padding: "10px",
       //   color: black,
     },
     body: {
       fontSize: 12,
       borderBottom: "none",
-      padding: "12px",
+      padding: "10px",
     },
   })
 )(TableCell);
 
-// const StyledTableRow = withStyles((theme) =>
-//   createStyles({
-//     root: {
-//       '&:nth-of-type(odd)': {
-//         backgroundColor: theme.palette.action.hover,
-//       },
-//     },
-//   }),
-// )(TableRow);
-
-// function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
-//   return { name, calories, fat, carbs, protein };
-// }
-
-// const rows = [
-//   createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-//   createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-//   createData('Eclair', 262, 16.0, 24, 6.0),
-//   createData('Cupcake', 305, 3.7, 67, 4.3),
-//   createData('Gingerbread', 356, 16.0, 49, 3.9),
-// ];
-
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   container: {
     width: "100%",
     display: "flex",
@@ -60,7 +39,7 @@ const useStyles = makeStyles({
   table: {
     width: "66vw",
     // minHeight:'61vh',
-    height: "61vh",
+
     maxHeight: "61vh",
     border: "1px solid lightgray",
     borderRadius: "10px",
@@ -72,65 +51,103 @@ const useStyles = makeStyles({
   loaderCell: {
     textAlign: "center",
   },
-});
+  paper: {
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[3],
+    borderRadius: "5px",
+    padding: theme.spacing(2, 4, 3),
+    outline: 0,
+  },
+}));
 
 export default function DataTable(props) {
   const { loading, data, pageNo, pageSize } = useContext(TableContext);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalData, setModalData] = useState(null);
   const classes = useStyles();
 
+  const loadModal = async (index) => {
+    await setModalData(data[index]);
+    await setModalVisible(!modalVisible);
+  };
+  const numberToDay = (j) => {
+    return ("0" + j).slice(-2);
+  };
   React.useEffect(() => {
     console.log(data);
   });
   return (
-    <TableContainer className={classes.container}>
-      <Table className={classes.table} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell align="center">No.</StyledTableCell>
-            <StyledTableCell align="left">Launched (UTC)</StyledTableCell>
-            <StyledTableCell align="left">Location</StyledTableCell>
-            <StyledTableCell align="left">Mission</StyledTableCell>
-            <StyledTableCell align="center">Orbit</StyledTableCell>
-            <StyledTableCell align="center">Launch Status</StyledTableCell>{" "}
-            <StyledTableCell align="left">Rocket</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        {loading ? (
-          <img src={Spinner} className={classes.loader} />
-        ) : (
-          <TableBody>
-            {data.map((row, index) => (
-              <TableRow key={index + 1}>
-                <StyledTableCell align="center">
-                  {index * 12 + 1}
-                </StyledTableCell>
-                <StyledTableCell>
-                  {!row.upcoming && !row.success
-                    ? moment(
-                        new Date(row.date_unix * 1000).toUTCString()
-                      ).format("D MMMM YYYY [at] h:mm")
-                    : moment(
-                        new Date(row.date_unix * 1000).toUTCString()
-                      ).format("D MMMM YYYY h:mm")}
-                </StyledTableCell>
+    <React.Fragment>
+      <InfoModal
+        classFields={classes.paper}
+        data={modalData}
+        visible={modalVisible}
+        setVisible={setModalVisible}
+      />
 
-                <StyledTableCell>{row.launchpad.name}</StyledTableCell>
-                <StyledTableCell>{row.name}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {row?.payloads[0]?.orbit}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <ChipHOC
-                    lvar={row.upcoming ? "upcoming" : "success"}
-                    lval={row.upcoming ? row.upcoming : row.success}
-                  />
-                </StyledTableCell>
-                <StyledTableCell>{row?.rocket?.name}</StyledTableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        )}
-      </Table>
-    </TableContainer>
+      <TableContainer className={classes.container}>
+        <Table className={classes.table} aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell align="center">No.</StyledTableCell>
+              <StyledTableCell align="left">Launched (UTC)</StyledTableCell>
+              <StyledTableCell align="left">Location</StyledTableCell>
+              <StyledTableCell align="left">Mission</StyledTableCell>
+              <StyledTableCell align="center">Orbit</StyledTableCell>
+              <StyledTableCell align="center">
+                Launch Status
+              </StyledTableCell>{" "}
+              <StyledTableCell align="left">Rocket</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          {loading ? (
+            <img src={Spinner} className={classes.loader} />
+          ) : (
+            <TableBody>
+              {data.map((row, index) => {
+                const input = (pageNo - 1) * pageSize + index + 1;
+                const rowSerial = numberToDay(input);
+                return (
+                  <TableRow
+                    key={index + 1}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      loadModal(index);
+                    }}
+                  >
+                    <StyledTableCell align="center">
+                      {rowSerial}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {!row.upcoming && !row.success
+                        ? moment(
+                            new Date(row.date_unix * 1000).toUTCString()
+                          ).format("D MMMM YYYY [at] h:mm")
+                        : moment(
+                            new Date(row.date_unix * 1000).toUTCString()
+                          ).format("D MMMM YYYY h:mm")}
+                    </StyledTableCell>
+
+                    <StyledTableCell>{row.launchpad.name}</StyledTableCell>
+                    <StyledTableCell>{row.name}</StyledTableCell>
+                    <StyledTableCell align="center">
+                      {row?.payloads[0]?.orbit}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <ChipHOC
+                        lvar={row.upcoming ? "upcoming" : "success"}
+                        lval={row.upcoming ? row.upcoming : row.success}
+                      />
+                    </StyledTableCell>
+                    <StyledTableCell>{row?.rocket?.name}</StyledTableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          )}
+        </Table>
+      </TableContainer>
+    </React.Fragment>
   );
 }
