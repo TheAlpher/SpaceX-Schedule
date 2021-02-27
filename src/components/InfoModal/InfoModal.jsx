@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function InfoModal() {
+export default function InfoModal({data}) {
     React.useEffect(()=>{
         
     })

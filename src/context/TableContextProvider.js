@@ -3,17 +3,18 @@ import TableContext from "./TableContext";
 import { validLaunchFilterCheck } from "../lib/util";
 import { LAUNCH_FILTERS } from "../lib/constants";
 import axios from "axios";
-const launchFilters = [];
 class TableProvider extends Component {
   state = {
     data: [],
-    loading: false,
+    loading: true,
     pageNo: 1,
-    perPage: 12,
+    totalDocs:1,
+    pageSize: 12,
     launchFilter: 0,
   };
   loadState = async () => {
-    this.setState({ loading: true });
+    if(!this.state.loading)
+    this.setState({ loading: true } );
     await this.setLaunchFilter();
     await this.setTableData();
     this.setState({ loading: false });
@@ -22,8 +23,9 @@ class TableProvider extends Component {
   setTableData = async () => {
     const queryObj = this.returnQueryObj();
     const optionsObj = {
-      limit: this.state.perPage,
-      offset: this.state.perPage * (this.state.pageNo - 1),
+      limit: this.state.pageSize,
+      offset: this.state.pageSize * (this.state.pageNo - 1),
+      populate:["launchpad","payloads","rocket"]
     };
     console.log(queryObj);
     axios
@@ -32,7 +34,13 @@ class TableProvider extends Component {
         options: optionsObj,
       })
       .then((res) => {
-        console.log(res.data);
+        if (res.data.docs.length > 0) {
+          console.log(res.data)
+          this.setState({
+            data: res.data.docs,
+            totalDocs:res.data.totalDocs
+          });
+        }
       });
   };
 
@@ -82,7 +90,7 @@ class TableProvider extends Component {
         let url = new URL(window.location);
         url.searchParams.set(`launch`, `${this.state.launchFilter}`);
         window.history.pushState({ path: url.href }, "", url.href);
-        this.setTableData();
+        this.loadState();
       }
     );
   };
@@ -90,7 +98,10 @@ class TableProvider extends Component {
   setPage = async (num) => {
     this.setState({
       pageNo: num,
+    },()=>{
+      this.loadState();
     });
+   
   };
 
   componentDidMount() {
@@ -103,8 +114,10 @@ class TableProvider extends Component {
           data: this.state.data,
           loading: this.state.loading,
           pageNo: this.state.pageNo,
-          perPage: this.state.perPage,
+          pageSize: this.state.pageSize,
+          totalDocs:this.state.totalDocs,
           launchFilter: this.state.launchFilter,
+          setPage:this.setPage,
           updateLaunchFilter: this.updateLaunchFilter,
         }}
       >

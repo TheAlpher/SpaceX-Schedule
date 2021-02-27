@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import TableContext from "../../context/TableContext";
+import moment from "moment";
 import { withStyles, createStyles, makeStyles } from "@material-ui/core/styles";
 import {
   Table,
@@ -9,17 +10,21 @@ import {
   TableHead,
   TableRow,
 } from "@material-ui/core";
-import axios from "axios";
+import ChipHOC from "../chip/chip";
 import Spinner from "assets/svg/Spinner.svg";
 import "./Table.css";
 const StyledTableCell = withStyles((theme) =>
   createStyles({
     head: {
       backgroundColor: "lightgray",
+      fontSize: 12,
+      padding: "12px",
       //   color: black,
     },
     body: {
-      fontSize: 14,
+      fontSize: 12,
+      borderBottom: "none",
+      padding: "12px",
     },
   })
 )(TableCell);
@@ -56,6 +61,10 @@ const useStyles = makeStyles({
     width: "66vw",
     // minHeight:'61vh',
     height: "61vh",
+    maxHeight: "61vh",
+    border: "1px solid lightgray",
+    borderRadius: "10px",
+    boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
   },
   loader: {
     height: "150px",
@@ -66,38 +75,57 @@ const useStyles = makeStyles({
 });
 
 export default function DataTable(props) {
-  const { loading } = useContext(TableContext);
+  const { loading, data, pageNo, pageSize } = useContext(TableContext);
   const classes = useStyles();
-  const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
-    console.log(props?.location?.search);
+    console.log(data);
   });
   return (
     <TableContainer className={classes.container}>
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell align="left">No.</StyledTableCell>
+            <StyledTableCell align="center">No.</StyledTableCell>
             <StyledTableCell align="left">Launched (UTC)</StyledTableCell>
             <StyledTableCell align="left">Location</StyledTableCell>
             <StyledTableCell align="left">Mission</StyledTableCell>
-            <StyledTableCell align="left">Orbit</StyledTableCell>
-            <StyledTableCell align="left">Launch Status</StyledTableCell>{" "}
-            <StyledTableCell align="left">Orbit</StyledTableCell>
+            <StyledTableCell align="center">Orbit</StyledTableCell>
+            <StyledTableCell align="center">Launch Status</StyledTableCell>{" "}
+            <StyledTableCell align="left">Rocket</StyledTableCell>
           </TableRow>
         </TableHead>
         {loading ? (
           <img src={Spinner} className={classes.loader} />
         ) : (
           <TableBody>
-            {data.map((row) => (
-              <TableRow key={row.name}>
+            {data.map((row, index) => (
+              <TableRow key={index + 1}>
+                <StyledTableCell align="center">
+                  {index * 12 + 1}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {!row.upcoming && !row.success
+                    ? moment(
+                        new Date(row.date_unix * 1000).toUTCString()
+                      ).format("D MMMM YYYY [at] h:mm")
+                    : moment(
+                        new Date(row.date_unix * 1000).toUTCString()
+                      ).format("D MMMM YYYY h:mm")}
+                </StyledTableCell>
+
+                <StyledTableCell>{row.launchpad.name}</StyledTableCell>
                 <StyledTableCell>{row.name}</StyledTableCell>
-                <StyledTableCell>{row.calories}</StyledTableCell>
-                <StyledTableCell>{row.fat}</StyledTableCell>
-                <StyledTableCell>{row.carbs}</StyledTableCell>
-                <StyledTableCell>{row.protein}</StyledTableCell>
+                <StyledTableCell align="center">
+                  {row?.payloads[0]?.orbit}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <ChipHOC
+                    lvar={row.upcoming ? "upcoming" : "success"}
+                    lval={row.upcoming ? row.upcoming : row.success}
+                  />
+                </StyledTableCell>
+                <StyledTableCell>{row?.rocket?.name}</StyledTableCell>
               </TableRow>
             ))}
           </TableBody>
