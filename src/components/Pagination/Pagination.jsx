@@ -17,6 +17,7 @@ export default function PaginationHOC() {
         <Pagination
           count={Math.ceil(totalDocs / pageSize)}
           defaultPage={pageNo}
+          page={pageNo}
           shape="rounded"
           variant="outlined"
           onChange={handleChangePage}

@@ -7,8 +7,12 @@ import CloseIcon from "@material-ui/icons/Close";
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
-    gridGap: theme.spacing(2),
     paddingTop: "1vh",
+  },
+  modal: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   paper: {
     padding: theme.spacing(4),
@@ -17,10 +21,11 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: { float: "right", marginRight: "1vw" },
 }));
-export default function InfoModal({ classFields, data, visible, setVisible }) {
+export default function InfoModal({ data, visible, setVisible }) {
   const classes = useStyles();
   React.useEffect(() => {
     console.log(data);
+   console.log( moment(new Date()).subtract(7,'d').toISOString());
   });
 
   return (
@@ -29,11 +34,7 @@ export default function InfoModal({ classFields, data, visible, setVisible }) {
       onClose={() => {
         setVisible(false);
       }}
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      className={classes.modal}
     >
       <Paper elevation={3} className={classes.paper}>
         <CloseIcon

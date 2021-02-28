@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext , useState} from "react";
 import { Select, Grid } from "@material-ui/core";
 import TableContext from "../../context/TableContext";
-
-import { LAUNCH_FILTERS } from "../../lib/constants";
+import DurationModal from '../DurationModal/DurationModal';
+import { LAUNCH_FILTERS,DURATION_FILTERS } from "../../lib/constants";
 export default function SubHeader() {
-  const { loading, launchFilter, updateLaunchFilter } = useContext(TableContext);
-
+  const { loading, launchFilter, updateLaunchFilter,duration,rangeFrom, rangeTo,updateDurationFilter } = useContext(TableContext);
+const [durationModal,setDurationModal]=useState(false);
   return (
     <Grid
       container
@@ -13,7 +13,10 @@ export default function SubHeader() {
       style={{ paddingTop: "2rem", paddingBottom: "2rem" }}
     >
       <Grid style={{ width: "66vw" }} container justify="space-between">
-        <Grid item>Duration Filter</Grid>
+        <Grid item style={{cursor:'pointer'}} onClick={()=>{
+          setDurationModal(!durationModal);
+        }}>{DURATION_FILTERS[duration]?.label  || "Custom"} &#709;</Grid>
+        <DurationModal visible={durationModal} durationType={duration} rangeFrom={rangeFrom} rangeTo={rangeTo} updateDurationFilter={updateDurationFilter} setVisible={setDurationModal} />
         <Grid item>
           <div className="launches-select">
             <select
