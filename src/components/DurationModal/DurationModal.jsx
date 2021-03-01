@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Grid, Paper } from "@material-ui/core";
 import { DURATION_FILTERS } from "../../lib/constants";
-import RangePicker from "../rangePicker/rangePicker";
+import RangePicker from "../RangePicker/RangePicker.jsx";
 import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,9 +36,6 @@ export default function DurationModal({
   rangeTo,
 }) {
   const classes = useStyles();
-  React.useEffect(() => {
-    console.log(data);
-  });
 
   return (
     <Modal

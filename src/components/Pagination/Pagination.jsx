@@ -1,19 +1,21 @@
 import React, { useContext } from "react";
-import "./Pagination.css";
 import { Pagination } from "@material-ui/lab";
 import TableContext from "../../context/TableContext";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(() => ({
+  container: { display: "flex", justifyContent: "center", marginTop: "1vh" },
+  wrapper: { display: "flex", justifyContent: "flex-end", width: "66vw" },
+}));
 export default function PaginationHOC() {
-  const { loading, setPage, pageNo, totalDocs, pageSize } = useContext(
-    TableContext
-  );
+  const { setPage, pageNo, totalDocs, pageSize } = useContext(TableContext);
+  const classes = useStyles();
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
   return (
-    <div style={{ display: "flex", justifyContent: "center" ,marginTop:'1vh'}}>
-      <div
-        style={{ display: "flex", justifyContent: "flex-end", width: "66vw" }}
-      >
+    <div className={classes.container}>
+      <div className={classes.wrapper}>
         <Pagination
           count={Math.ceil(totalDocs / pageSize)}
           defaultPage={pageNo}

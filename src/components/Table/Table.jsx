@@ -11,10 +11,10 @@ import {
   TableRow,
   Grid,
 } from "@material-ui/core";
-import ChipHOC from "../chip/chip";
+import ChipHOC from "../Chip/Chip";
 import InfoModal from "../InfoModal/InfoModal";
 import Spinner from "assets/svg/Spinner.svg";
-import "./Table.css";
+
 const StyledTableCell = withStyles((theme) =>
   createStyles({
     head: {
@@ -179,7 +179,7 @@ export default function DataTable(props) {
                 <StyledTableCell align="center">Orbit</StyledTableCell>
                 <StyledTableCell align="center">
                   Launch Status
-                </StyledTableCell>{" "}
+                </StyledTableCell>
                 <StyledTableCell align="left">Rocket</StyledTableCell>
               </TableRow>
             </TableHead>
