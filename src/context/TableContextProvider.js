@@ -16,7 +16,8 @@ class TableProvider extends Component {
     launchFilter: 0,
   };
   loadState = async () => {
-    if (!this.state.loading) this.setState({ loading: true });
+    if (!this.state.loading) 
+    this.setState({ loading: true });
     await this.setLaunchFilter();
     await this.setDurationFilter();
     await this.setTableData();
@@ -36,7 +37,7 @@ class TableProvider extends Component {
         options: optionsObj,
       })
       .then((res) => {
-        if (res.data.docs.length > 0) {
+        if (res.data.totalDocs >= 0) {
           this.setState({
             data: res.data.docs,
             totalDocs: res.data.totalDocs,

@@ -99,10 +99,10 @@ export default class RangePicker extends React.Component {
           onDayClick={this.handleDayClick}
           onDayMouseEnter={this.handleDayMouseEnter}
         />
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div  className="DayPicker-confirm" >
           {from && to && (
             <Button
-              color="primary"
+            variant="outlined" color="primary"
               onClick={() => {
                 this.props.updateDurationFilter(
                   "6",
@@ -112,7 +112,7 @@ export default class RangePicker extends React.Component {
                 this.props.setVisible(false);
               }}
             >
-              Confirm
+      Confirm
             </Button>
           )}
         </div>

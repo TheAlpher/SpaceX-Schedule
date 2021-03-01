@@ -9,6 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Grid,
 } from "@material-ui/core";
 import ChipHOC from "../chip/chip";
 import InfoModal from "../InfoModal/InfoModal";
@@ -20,7 +21,6 @@ const StyledTableCell = withStyles((theme) =>
       backgroundColor: "lightgray",
       fontSize: 12,
       padding: "10px",
-      //   color: black,
     },
     body: {
       fontSize: 12,
@@ -31,19 +31,26 @@ const StyledTableCell = withStyles((theme) =>
 )(TableCell);
 
 const useStyles = makeStyles((theme) => ({
-  container: {
-    width: "100%",
+  wrapper: {
     display: "flex",
     justifyContent: "center",
+    width: "100%",
   },
-  table: {
-    width: "66vw",
-    // minHeight:'61vh',
-
-    maxHeight: "61vh",
+  container: {
+    minHeight: "66vh",
+    height: "66vh",
+    overflow: "auto",
+    width: "66.1vw",
     border: "1px solid lightgray",
     borderRadius: "10px",
     boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
+  },
+
+  loaderContainer: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "90%",
   },
   loader: {
     height: "150px",
@@ -51,6 +58,11 @@ const useStyles = makeStyles((theme) => ({
   loaderCell: {
     textAlign: "center",
   },
+
+  messageDiv: {
+    display: "none",
+  },
+  tableRow:{ cursor: "pointer"},
   paper: {
     width: 400,
     backgroundColor: theme.palette.background.paper,
@@ -77,6 +89,67 @@ export default function DataTable(props) {
   React.useEffect(() => {
     console.log(data);
   });
+
+  const renderLoader = () => {
+    if (loading) {
+      return (
+        <Grid container className={classes.loaderContainer}>
+          <img src={Spinner} className={classes.loader} />
+        </Grid>
+      );
+    } else return null;
+  };
+
+  const renderNoData = (data) => {
+    if (!loading && data?.length == 0)
+      return (
+        <Grid container className={classes.loaderContainer}>
+          <span>No results found for the specified filter</span>
+        </Grid>
+      );
+    else return null;
+  };
+  const renderRows = (data) => {
+    if (!loading)
+    {return  data.map((row, index) => {
+        const input = (pageNo - 1) * pageSize + index + 1;
+        const rowSerial = numberToDay(input);
+        return (
+          <TableRow
+            key={index + 1}
+            className={classes.tableRow}
+            onClick={() => {
+              loadModal(index);
+            }}
+          >
+            <StyledTableCell align="center">{rowSerial}</StyledTableCell>
+            <StyledTableCell>
+              {!row.upcoming && !row.success
+                ? moment(new Date(row.date_unix * 1000).toUTCString()).format(
+                    "D MMMM YYYY [at] h:mm"
+                  )
+                : moment(new Date(row.date_unix * 1000).toUTCString()).format(
+                    "D MMMM YYYY h:mm"
+                  )}
+            </StyledTableCell>
+
+            <StyledTableCell>{row.launchpad.name}</StyledTableCell>
+            <StyledTableCell>{row.name}</StyledTableCell>
+            <StyledTableCell align="center">
+              {row?.payloads[0]?.orbit}
+            </StyledTableCell>
+            <StyledTableCell align="center">
+              <ChipHOC
+                lvar={row.upcoming ? "upcoming" : "success"}
+                lval={row.upcoming ? row.upcoming : row.success}
+              />
+            </StyledTableCell>
+            <StyledTableCell>{row?.rocket?.name}</StyledTableCell>
+          </TableRow>
+        );
+      });}
+    else return null;
+  };
   return (
     <React.Fragment>
       <InfoModal
@@ -85,69 +158,42 @@ export default function DataTable(props) {
         visible={modalVisible}
         setVisible={setModalVisible}
       />
+      <div className={classes.wrapper}>
+        <TableContainer className={classes.container}>
+          <Table  aria-label="customized table">
+            <colgroup>
+              <col width="7%" />
+              <col width="20%" />
+              <col width="16%" />
+              <col width="17%" />
+              <col width="10%" />
+              <col width="15%" />
+              <col width="15%" />
+            </colgroup>
+            <TableHead>
+              <TableRow>
+                <StyledTableCell align="center">No.</StyledTableCell>
+                <StyledTableCell align="left">Launched (UTC)</StyledTableCell>
+                <StyledTableCell align="left">Location</StyledTableCell>
+                <StyledTableCell align="left">Mission</StyledTableCell>
+                <StyledTableCell align="center">Orbit</StyledTableCell>
+                <StyledTableCell align="center">
+                  Launch Status
+                </StyledTableCell>{" "}
+                <StyledTableCell align="left">Rocket</StyledTableCell>
+              </TableRow>
+            </TableHead>
 
-      <TableContainer className={classes.container}>
-        <Table className={classes.table} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell align="center">No.</StyledTableCell>
-              <StyledTableCell align="left">Launched (UTC)</StyledTableCell>
-              <StyledTableCell align="left">Location</StyledTableCell>
-              <StyledTableCell align="left">Mission</StyledTableCell>
-              <StyledTableCell align="center">Orbit</StyledTableCell>
-              <StyledTableCell align="center">
-                Launch Status
-              </StyledTableCell>{" "}
-              <StyledTableCell align="left">Rocket</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          {loading ? (
-            <img src={Spinner} className={classes.loader} />
-          ) : (
-            <TableBody>
-              {data.map((row, index) => {
-                const input = (pageNo - 1) * pageSize + index + 1;
-                const rowSerial = numberToDay(input);
-                return (
-                  <TableRow
-                    key={index + 1}
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      loadModal(index);
-                    }}
-                  >
-                    <StyledTableCell align="center">
-                      {rowSerial}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      {!row.upcoming && !row.success
-                        ? moment(
-                            new Date(row.date_unix * 1000).toUTCString()
-                          ).format("D MMMM YYYY [at] h:mm")
-                        : moment(
-                            new Date(row.date_unix * 1000).toUTCString()
-                          ).format("D MMMM YYYY h:mm")}
-                    </StyledTableCell>
-
-                    <StyledTableCell>{row.launchpad.name}</StyledTableCell>
-                    <StyledTableCell>{row.name}</StyledTableCell>
-                    <StyledTableCell align="center">
-                      {row?.payloads[0]?.orbit}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      <ChipHOC
-                        lvar={row.upcoming ? "upcoming" : "success"}
-                        lval={row.upcoming ? row.upcoming : row.success}
-                      />
-                    </StyledTableCell>
-                    <StyledTableCell>{row?.rocket?.name}</StyledTableCell>
-                  </TableRow>
-                );
-              })}
+            <TableBody
+              className={(loading || data?.length == 0) && classes.messageDiv}
+            >
+              {renderRows(data)}
             </TableBody>
-          )}
-        </Table>
-      </TableContainer>
+          </Table>
+          {renderLoader()}
+          {renderNoData(data)}
+        </TableContainer>
+      </div>{" "}
     </React.Fragment>
   );
 }

@@ -1,11 +1,8 @@
 import React from "react";
 import { Modal, Grid, Paper } from "@material-ui/core";
-import ChipHOC from "../chip/chip";
-import {DURATION_FILTERS} from "../../lib/constants";
-import moment from "moment";
-import RangePicker from '../rangePicker/rangePicker';
+import { DURATION_FILTERS } from "../../lib/constants";
+import RangePicker from "../rangePicker/rangePicker";
 import { makeStyles } from "@material-ui/core/styles";
-import CloseIcon from "@material-ui/icons/Close";
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
@@ -17,18 +14,27 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   paper: {
-    padding: theme.spacing(4),
-    width: 652,
+    padding: theme.spacing(3),
+    width: "42.9vw",
     outline: 0,
+    minHeight: "32vh",
   },
-  list:{
-      listStyle:"none",
-      paddingLeft:0,
-      margin:0,
+  list: {
+    listStyle: "none",
+    paddingLeft: 0,
+    margin: 0,
   },
   icon: { float: "right", marginRight: "1vw" },
 }));
-export default function DurationModal({ data, visible, setVisible,durationType,updateDurationFilter, rangeFrom, rangeTo }) {
+export default function DurationModal({
+  data,
+  visible,
+  setVisible,
+  durationType,
+  updateDurationFilter,
+  rangeFrom,
+  rangeTo,
+}) {
   const classes = useStyles();
   React.useEffect(() => {
     console.log(data);
@@ -44,19 +50,33 @@ export default function DurationModal({ data, visible, setVisible,durationType,u
     >
       <Paper elevation={3} className={classes.paper}>
         <Grid className={classes.container}>
-          <Grid item xs={3} style={{borderRight:"1px solid lightgray"}}>
+          <Grid item xs={3} style={{ borderRight: "1px solid lightgray" }}>
             <ul className={classes.list}>
-                {Object.keys(DURATION_FILTERS).map((ele)=>{
-                    return (
-                        <li onClick={()=>{
-                           updateDurationFilter(ele);
-                            setVisible(false);
-                        }}  style={{cursor:"pointer"}} key={DURATION_FILTERS[ele]?.value}>{DURATION_FILTERS[ele]?.modalLabel}</li>
-                    )
-                })}
+              {Object.keys(DURATION_FILTERS).map((ele) => {
+                return (
+                  <li
+                    onClick={() => {
+                      updateDurationFilter(ele);
+                      setVisible(false);
+                    }}
+                    style={{ cursor: "pointer" }}
+                    key={DURATION_FILTERS[ele]?.value}
+                  >
+                    {DURATION_FILTERS[ele]?.modalLabel}
+                  </li>
+                );
+              })}
             </ul>
           </Grid>
-          <Grid item xs={9}><RangePicker setVisible={setVisible} durationType={durationType}  rangeFrom={rangeFrom} updateDurationFilter={updateDurationFilter} rangeTo={rangeTo}/></Grid>
+          <Grid item xs={9}>
+            <RangePicker
+              setVisible={setVisible}
+              durationType={durationType}
+              rangeFrom={rangeFrom}
+              updateDurationFilter={updateDurationFilter}
+              rangeTo={rangeTo}
+            />
+          </Grid>
         </Grid>
       </Paper>
     </Modal>

@@ -1,4 +1,5 @@
 import { LAUNCH_FILTERS, DURATION_FILTERS } from "./constants";
+import moment from "moment";
 function validLaunchFilterCheck(val) {
   //0 -> All Launches  1-> Upcoming Launches 2-> Successful Launches 3-> Failed Launches
   if (LAUNCH_FILTERS.findIndex((ele) => ele.key === val) !== -1) {
@@ -10,7 +11,8 @@ function validDurationFilterCheck(val) {
   //6 for custom range filter
   if (
     val.toString() == "6" ||
-    Object.keys(DURATION_FILTERS).find((ele)=>ele==val.toString())!==undefined
+    Object.keys(DURATION_FILTERS).find((ele) => ele == val.toString()) !==
+      undefined
   ) {
     return true;
   }
@@ -26,13 +28,20 @@ function validDurationRangeFilters(lb, ub) {
       return true;
     } else return false;
   } catch (err) {
-      console.log(err);
-      return false;
+    console.log(err);
+    return false;
   }
 }
 
+function unixToutc(unix) {
+  if (unix)
+    return moment(new Date(unix * 1000).toUTCString()).format(
+      "D MMMM YYYY hh:mm"
+    );
+}
 export {
   validLaunchFilterCheck,
   validDurationFilterCheck,
   validDurationRangeFilters,
+  unixToutc,
 };
