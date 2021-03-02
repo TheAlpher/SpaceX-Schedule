@@ -4,17 +4,15 @@ import SubHeader from "components/SubHeader/SubHeader";
 import Table from "components/Table/Table";
 import PaginationHOC from "components/Pagination/Pagination";
 import TableContextProvider from "../context/TableContextProvider";
-import axios from "axios";
-export default function Home(props) {
-  React.useEffect(() => {
-  });
+export default function Home() {
   return (
-    <TableContextProvider>
-      <div>
+    <div>
+      <TableContextProvider>
         <Header />
         <SubHeader />
-        <Table  />
-        <PaginationHOC/></div>
-    </TableContextProvider>
+        <Table />
+        <PaginationHOC />
+      </TableContextProvider>{" "}
+    </div>
   );
 }

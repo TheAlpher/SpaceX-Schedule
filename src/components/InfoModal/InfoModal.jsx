@@ -8,7 +8,7 @@ import YouTubeIcon from "@material-ui/icons/YouTube";
 import RedditIcon from "@material-ui/icons/Reddit";
 import Wikipedia from "../../assets/svg/Wikipedia.svg";
 import LanguageIcon from "@material-ui/icons/Language";
-import {unixToutc} from '../../lib/util.js';
+import { unixToutc } from "../../lib/util.js";
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
@@ -23,10 +23,10 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(4),
     width: "37.8vw",
     outline: 0,
-    fontSize:14,
+    fontSize: 14,
   },
-  patch:{width:72},
-  launch:{ fontWeight: "bold", fontSize: "18px" },
+  patch: { width: 72 },
+  launch: { fontWeight: "bold", fontSize: "18px" },
   hr: {
     marginTop: "0.5rem",
     marginBottom: "0.5rem",
@@ -39,13 +39,8 @@ const useStyles = makeStyles((theme) => ({
   },
   linkWiki: { fontSize: 14, marginTop: "1vh" },
 }));
-const  InfoModal =({ data, visible, setVisible })=> {
+const InfoModal = ({ data, visible, setVisible }) => {
   const classes = useStyles();
-  React.useEffect(() => {
-    console.log(data);
-    console.log(moment(new Date()).subtract(7, "d").toISOString());
-  });
-
   return (
     <Modal
       open={visible}
@@ -70,10 +65,7 @@ const  InfoModal =({ data, visible, setVisible })=> {
           </Grid>
           <Grid item xs={9}>
             <Grid container>
-              <span className={classes.launch}>
-                {" "}
-                {data?.name}
-              </span>
+              <span className={classes.launch}> {data?.name}</span>
               &nbsp; &nbsp;
               <ChipHOC
                 lvar={data?.upcoming ? "upcoming" : "success"}
@@ -83,8 +75,11 @@ const  InfoModal =({ data, visible, setVisible })=> {
             {data?.rocket.name}
             <Grid container>
               {data?.links?.reddit.campaign && (
-                <a target="_blank"                   className={classes.links}
-                href={data?.links?.reddit?.campaign}>
+                <a
+                  target="_blank"
+                  className={classes.links}
+                  href={data?.links?.reddit?.campaign}
+                >
                   <RedditIcon />
                 </a>
               )}{" "}
@@ -93,7 +88,7 @@ const  InfoModal =({ data, visible, setVisible })=> {
                 <a
                   href={data?.links?.webcast}
                   target="_blank"
-                 className={classes.links}
+                  className={classes.links}
                 >
                   <YouTubeIcon />
                 </a>
@@ -104,7 +99,6 @@ const  InfoModal =({ data, visible, setVisible })=> {
                   href={data?.links?.wikipedia}
                   target="_blank"
                   className={classes.links}
-
                 >
                   <img src={Wikipedia} width={24} />
                 </a>
@@ -115,7 +109,6 @@ const  InfoModal =({ data, visible, setVisible })=> {
                   href={data?.links?.article}
                   target="_blank"
                   className={classes.links}
-
                 >
                   <LanguageIcon />
                 </a>
@@ -226,5 +219,5 @@ const  InfoModal =({ data, visible, setVisible })=> {
       </Paper>
     </Modal>
   );
-}
+};
 export default InfoModal;

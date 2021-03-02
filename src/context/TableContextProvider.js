@@ -10,11 +10,15 @@ class TableProvider extends Component {
     pageNo: 1,
     rangeFrom: DURATION_FILTERS[3].lb,
     rangeTo: DURATION_FILTERS[3].ub,
-    duration: 3,
+    durationFilter: 3,
     totalDocs: 0,
     pageSize: 12,
     launchFilter: 0,
   };
+/**
+ * Set the initial state values
+ */
+
   loadState = async () => {
     if (!this.state.loading) 
     this.setState({ loading: true });
@@ -24,7 +28,12 @@ class TableProvider extends Component {
     this.setState({ loading: false });
   };
 
-  setTableData = async () => {
+ /**
+  * Set the data inside the table
+  */ 
+
+
+ setTableData = async () => {
     const queryObj = this.returnQueryObj();
     const optionsObj = {
       limit: this.state.pageSize,
@@ -47,6 +56,9 @@ class TableProvider extends Component {
       });
   };
 
+/**
+  * Return the Query Object for the api call based on filter conditions 
+  */ 
   returnQueryObj = () => {
     let queryObj = {};
 
@@ -76,6 +88,11 @@ class TableProvider extends Component {
     }
     return queryObj;
   };
+
+/**
+ * Set initial launch filter on load from URL if Launch parameters exists and is valid 
+ */
+
   setLaunchFilter = async () => {
     let url = new URL(window.location);
     let launchVal = url.searchParams.get("launch");
@@ -87,6 +104,12 @@ class TableProvider extends Component {
       }
     }
   };
+
+/**
+ *  Set the page number and call @func setTableData
+ * @param {number} num - The Selected Page Number 
+ */
+
   setPage = async (num) => {
     this.setState(
       {
@@ -100,6 +123,10 @@ class TableProvider extends Component {
     );
   };
 
+  /**
+   * Update the state of launch filter and call @func setPage 
+   * @param {number} val - updated value of launch filter 
+   */
   updateLaunchFilter = async (val) => {
     this.setState(
       {
@@ -113,49 +140,51 @@ class TableProvider extends Component {
       }
     );
   };
-
+/**
+ * Set initial Duration Filters based on URL if values exist and valid
+ */
   setDurationFilter = async () => {
     let url = new URL(window.location);
-    console.log(typeof url.searchParams.get("lt"));
-    console.log(url.searchParams.get("gt"));
     let durationVal = url.searchParams.get("duration");
-    let durationlt = new Date(Number(url.searchParams.get("lt"))*1000).toISOString();
-    let durationgt = new Date(Number(url.searchParams.get("gt"))*1000).toISOString();
+    let durationlt = new Date(Number(url.searchParams.get("lt"))*1000).toISOString(); //lt => less than date filter value
+    let durationgt = new Date(Number(url.searchParams.get("gt"))*1000).toISOString(); //gt => greater than date filter value
  
     if (durationVal && validDurationFilterCheck(durationVal)) {
       if (Object.keys(DURATION_FILTERS))
         this.setState({
-          duration: durationVal,
+          durationFilter: durationVal,
           rangeFrom: DURATION_FILTERS[durationVal]?.lb,
           rangeTo: DURATION_FILTERS[durationVal]?.ub,
         });
       else if (validLaunchFilterCheck(durationgt, durationlt)) {
-        // duration val == 6 i.e custom
+      
         this.setState({
-          duration: durationVal,
+          durationFilter: durationVal,  // durationFilter value == 6 i.e Custom duration filter
           rangeFrom: durationgt,
           rangeTo: durationlt,
         });
       }
     }
-console.log(durationVal);
     return 0;
   };
-
+/**
+ *  Update duration filter using num and  @constant DURATION_FILTERS
+ * @param {char} num - DurationFilter value ('0'-'6') 
+ * @param {String} gt - Greater than ISO Date String 
+ * @param {String} lt - Less than ISO Date String
+ */
   updateDurationFilter = async (num, gt, lt) => {
 
     if (DURATION_FILTERS[num]) {
-      console.log(DURATION_FILTERS[num].lb);
-      console.log(DURATION_FILTERS[num].ub);
       this.setState(
         {
-          duration: num,
+          durationFilter: num,
           rangeFrom: DURATION_FILTERS[num]?.lb,
           rangeTo: DURATION_FILTERS[num]?.ub,
         },
         async () => {
           let url = new URL(window.location);
-          url.searchParams.set(`duration`, `${this.state.duration}`);
+          url.searchParams.set(`duration`, `${this.state.durationFilter}`);
           url.searchParams.set(`lt`, `${Date.parse(this.state.rangeTo)}`);
           url.searchParams.set(`gt`, `${Date.parse(this.state.rangeFrom)}`);
           window.history.pushState({ path: url.href }, "", url.href);
@@ -165,13 +194,13 @@ console.log(durationVal);
     } else {
       this.setState(
         {
-          duration: num,
+          validDurationRangeFilters: num,
           rangeFrom: gt,
           rangeTo: lt,
         },
         async () => {
           let url = new URL(window.location);
-          url.searchParams.set(`duration`, `${this.state.duration}`);
+          url.searchParams.set(`duration`, `${this.state.durationFilter}`);
           url.searchParams.set(`lt`, `${Date.parse(this.state.rangeTo)}`);
           url.searchParams.set(`gt`, `${Date.parse(this.state.rangeFrom)}`);
           window.history.pushState({ path: url.href }, "", url.href);
@@ -191,10 +220,9 @@ console.log(durationVal);
           data: this.state.data,
           loading: this.state.loading,
           pageNo: this.state.pageNo,
-          duration:this.state.duration,
           rangeFrom:this.state.rangeFrom,
           rangeTo:this.state.rangeTo,
-          duration: this.state.duration,
+          durationFilter: this.state.durationFilter,
           pageSize: this.state.pageSize,
           totalDocs: this.state.totalDocs,
           launchFilter: this.state.launchFilter,

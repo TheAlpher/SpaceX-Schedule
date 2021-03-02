@@ -1,5 +1,7 @@
 import moment from "moment";
-
+/**
+ * Possible Launch Type Select Filters
+ */
 const LAUNCH_FILTERS = [
   {
     key: 0,
@@ -22,7 +24,10 @@ const LAUNCH_FILTERS = [
     name: "Failed Launches",
   },
 ];
-
+/**
+ * Possible Status types for Launches 
+ * BgColor And Color used for Table Data Status Chip 
+ */
 const STATUS_TYPES = [
   {
     label: "Upcoming",
@@ -47,48 +52,52 @@ const STATUS_TYPES = [
   },
 ];
 
+/**
+ * Possible Launch Date Range filter options 
+ * @excludes case Custom with value 6 for Custom greater than and lower than Date Values  
+ */
 const DURATION_FILTERS = {
   0: {
     value: 0,
     lb: moment(new Date()).subtract(7, "days").toISOString(),
     ub: moment(new Date()).toISOString(),
-    label:"Last week",
-    modalLabel:"Past week"
+    label: "Last week",
+    modalLabel: "Past week",
   },
   1: {
     value: 1,
     ub: moment(new Date()).toISOString(),
     lb: moment(new Date()).subtract(1, "months").toISOString(),
-    label:"Last month",
-    modalLabel:"Past Month",
+    label: "Last month",
+    modalLabel: "Past Month",
   },
   2: {
     value: 2,
     ub: moment(new Date()).toISOString(),
     lb: moment(new Date()).subtract(3, "months").toISOString(),
-    label:"Last 3 months",
-    modallabel:"Past 3 months",
+    label: "Last 3 months",
+    modalLabel: "Past 3 months",
   },
   3: {
     value: 3,
     ub: moment(new Date()).toISOString(),
     lb: moment(new Date()).subtract(6, "months").toISOString(),
-    label:"Last 6 months",
-    modalLabel:"Past 6 months",
+    label: "Last 6 months",
+    modalLabel: "Past 6 months",
   },
   4: {
     value: 4,
     ub: moment(new Date()).toISOString(),
     lb: moment(new Date()).subtract(1, "years").toISOString(),
-    label:"Last year",
-    modalLabel:"Past year"
+    label: "Last year",
+    modalLabel: "Past year",
   },
   5: {
     value: 5,
     ub: moment(new Date()).toISOString(),
     lb: moment(new Date()).subtract(2, "years").toISOString(),
-    label:"Last 2 years",
-    modalLabel:"Past 2 years"
+    label: "Last 2 years",
+    modalLabel: "Past 2 years",
   },
 };
 

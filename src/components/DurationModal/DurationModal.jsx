@@ -24,13 +24,20 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 0,
     margin: 0,
   },
+  listItem: {
+    cursor: "pointer",
+    padding: "5px 0",
+  },
+  borderRight: {
+    borderRight: "1px solid lightgray",
+  },
+
   icon: { float: "right", marginRight: "1vw" },
 }));
 export default function DurationModal({
-  data,
   visible,
   setVisible,
-  durationType,
+  durationFilter,
   updateDurationFilter,
   rangeFrom,
   rangeTo,
@@ -47,7 +54,7 @@ export default function DurationModal({
     >
       <Paper elevation={3} className={classes.paper}>
         <Grid className={classes.container}>
-          <Grid item xs={3} style={{ borderRight: "1px solid lightgray" }}>
+          <Grid item xs={3} className={classes.borderRight}>
             <ul className={classes.list}>
               {Object.keys(DURATION_FILTERS).map((ele) => {
                 return (
@@ -56,7 +63,7 @@ export default function DurationModal({
                       updateDurationFilter(ele);
                       setVisible(false);
                     }}
-                    style={{ cursor: "pointer" }}
+                    className={classes.listItem}
                     key={DURATION_FILTERS[ele]?.value}
                   >
                     {DURATION_FILTERS[ele]?.modalLabel}
@@ -68,7 +75,7 @@ export default function DurationModal({
           <Grid item xs={9}>
             <RangePicker
               setVisible={setVisible}
-              durationType={durationType}
+              durationFilter={durationFilter}
               rangeFrom={rangeFrom}
               updateDurationFilter={updateDurationFilter}
               rangeTo={rangeTo}

@@ -1,14 +1,24 @@
 import { LAUNCH_FILTERS, DURATION_FILTERS } from "./constants";
 import moment from "moment";
+/**
+ * Check if launch filter value passsed in URL is valid or not using @constant LAUNCH_FILTERS
+ * @param {number} val Launch Filter Value 
+ */
+
+
 function validLaunchFilterCheck(val) {
-  //0 -> All Launches  1-> Upcoming Launches 2-> Successful Launches 3-> Failed Launches
   if (LAUNCH_FILTERS.findIndex((ele) => ele.key === val) !== -1) {
     return true;
   }
   return false;
 }
+/**
+ * Check if  duration filter value passed in URL is valid or not using @constant DURATION_FILTERS
+ * @param {number} val Duration Filter check 
+ * @note  valid Duration filter can be from (0-5) from DURATION_FILTERS or 6 for custom dates 
+ */
+
 function validDurationFilterCheck(val) {
-  //6 for custom range filter
   if (
     val.toString() == "6" ||
     Object.keys(DURATION_FILTERS).find((ele) => ele == val.toString()) !==
@@ -19,6 +29,11 @@ function validDurationFilterCheck(val) {
   return false;
 }
 
+/**
+ * Check if Date Range values mentioned in the URL are valid or not
+ * @param {Number} lb  greater than Unix Date value 
+ * @param {Number} ub  less than Unix Date value
+ */
 function validDurationRangeFilters(lb, ub) {
   try {
     let d1 = new Date(lb);
@@ -32,6 +47,10 @@ function validDurationRangeFilters(lb, ub) {
     return false;
   }
 }
+/**
+ * Convert Unix Date to formatted UTC String
+ * @param {Number} unix Unix Date 
+ */
 
 function unixToutc(unix) {
   if (unix)

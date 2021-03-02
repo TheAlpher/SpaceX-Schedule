@@ -12,17 +12,17 @@ export default class RangePicker extends React.Component {
   }
 
   getInitialState() {
-    if (String(this.props.durationType) == "6")
+    if (String(this.props.durationFilter) == "6")
       return {
         from: new Date(this.props.rangeFrom) || null,
         to: new Date(this.props.rangeTo) || null,
-        enteredTo: new Date(this.props.rangeTo) || null, // Keep track of the last day for mouseEnter.
+        enteredTo: new Date(this.props.rangeTo) || null,
       };
     else {
       return {
         from: null,
         to: null,
-        enteredTo: null, //
+        enteredTo: null, 
       };
     }
   }
@@ -36,23 +36,17 @@ export default class RangePicker extends React.Component {
   handleDayClick(day) {
     const { from, to } = this.state;
     if (from && to && day >= from && day <= to) {
-      console.log("case 1");
       this.handleResetClick();
       return;
     }
     if (this.isSelectingFirstDay(from, to, day)) {
-      console.log("case 2");
-
       this.setState({
         from: day,
         to: null,
         enteredTo: null,
       });
     } else {
-      console.log("case 3");
-
       if (day <= new Date()) {
-        console.log("case 3-1");
         this.setState({
           to: day,
           enteredTo: day,
@@ -71,12 +65,11 @@ export default class RangePicker extends React.Component {
   }
 
   handleResetClick() {
-
-      this.setState({
-        from: null,
-        to: null,
-        enteredTo: null, //
-      })
+    this.setState({
+      from: null,
+      to: null,
+      enteredTo: null,
+    });
   }
 
   render() {
@@ -99,10 +92,11 @@ export default class RangePicker extends React.Component {
           onDayClick={this.handleDayClick}
           onDayMouseEnter={this.handleDayMouseEnter}
         />
-        <div  className="DayPicker-confirm" >
+        <div className="DayPicker-confirm">
           {from && to && (
             <Button
-            variant="outlined" color="primary"
+              variant="outlined"
+              color="primary"
               onClick={() => {
                 this.props.updateDurationFilter(
                   "6",
@@ -112,7 +106,7 @@ export default class RangePicker extends React.Component {
                 this.props.setVisible(false);
               }}
             >
-      Confirm
+              Confirm
             </Button>
           )}
         </div>

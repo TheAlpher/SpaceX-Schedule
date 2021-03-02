@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   messageDiv: {
     display: "none",
   },
-  tableRow:{ cursor: "pointer"},
+  tableRow: { cursor: "pointer" },
   paper: {
     width: 400,
     backgroundColor: theme.palette.background.paper,
@@ -78,17 +78,25 @@ export default function DataTable(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalData, setModalData] = useState(null);
   const classes = useStyles();
-
+/**
+ * Set Modal Data using index of Data Row and Toggle Modal
+ * @param {number} index Index of Table Data Row clicked on
+ */
   const loadModal = async (index) => {
     await setModalData(data[index]);
     await setModalVisible(!modalVisible);
   };
+/**
+ * Convert one digit numbers to 2 digits by appending before them for table Serial No.
+ * @param {number} j 
+ */
+
   const numberToDay = (j) => {
     return ("0" + j).slice(-2);
   };
-  React.useEffect(() => {
-    console.log(data);
-  });
+/**
+ * Render Loader when the loading flag state is set to true
+ */
 
   const renderLoader = () => {
     if (loading) {
@@ -99,7 +107,10 @@ export default function DataTable(props) {
       );
     } else return null;
   };
-
+/**
+ * Render No results message when the data length is 0 and loading flag is set to false
+ * @param {Array} data 
+ */
   const renderNoData = (data) => {
     if (!loading && data?.length == 0)
       return (
@@ -109,9 +120,14 @@ export default function DataTable(props) {
       );
     else return null;
   };
+
+  /**
+   * Render Rows of table body using  data state from provider
+   * @param {Array} data 
+   */
   const renderRows = (data) => {
-    if (!loading)
-    {return  data.map((row, index) => {
+    if (!loading) {
+      return data.map((row, index) => {
         const input = (pageNo - 1) * pageSize + index + 1;
         const rowSerial = numberToDay(input);
         return (
@@ -147,8 +163,8 @@ export default function DataTable(props) {
             <StyledTableCell>{row?.rocket?.name}</StyledTableCell>
           </TableRow>
         );
-      });}
-    else return null;
+      });
+    } else return null;
   };
   return (
     <React.Fragment>
@@ -160,7 +176,7 @@ export default function DataTable(props) {
       />
       <div className={classes.wrapper}>
         <TableContainer className={classes.container}>
-          <Table  aria-label="customized table">
+          <Table aria-label="customized table">
             <colgroup>
               <col width="7%" />
               <col width="20%" />
@@ -177,9 +193,7 @@ export default function DataTable(props) {
                 <StyledTableCell align="left">Location</StyledTableCell>
                 <StyledTableCell align="left">Mission</StyledTableCell>
                 <StyledTableCell align="center">Orbit</StyledTableCell>
-                <StyledTableCell align="center">
-                  Launch Status
-                </StyledTableCell>
+                <StyledTableCell align="center">Launch Status</StyledTableCell>
                 <StyledTableCell align="left">Rocket</StyledTableCell>
               </TableRow>
             </TableHead>
