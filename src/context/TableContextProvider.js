@@ -4,6 +4,13 @@ import { validLaunchFilterCheck,validDurationFilterCheck,validDurationRangeFilte
 import { LAUNCH_FILTERS, DURATION_FILTERS } from "../lib/constants";
 import axios from "axios";
 class TableProvider extends Component {
+    /**
+     *Initialized state values
+     * Duration Filter and Range by default set to last 6 months 
+     * Launch Filter by default set to All Launches
+     * Page Size set to 12
+     * Page No initialized with 1 and resets to 1 at every api call
+     */
   state = {
     data: [],
     loading: true,
@@ -209,7 +216,9 @@ class TableProvider extends Component {
       );
     }
   };
-
+/**
+ * Set initial state values at Did mount
+ */
   componentDidMount() {
     this.loadState();
   }
