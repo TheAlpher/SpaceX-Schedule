@@ -201,7 +201,7 @@ class TableProvider extends Component {
     } else {
       this.setState(
         {
-          validDurationRangeFilters: num,
+         durationFilter: num,
           rangeFrom: gt,
           rangeTo: lt,
         },
