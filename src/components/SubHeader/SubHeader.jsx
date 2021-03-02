@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import { Grid } from "@material-ui/core";
-import TableContext from "../../context/TableContext";
+import TableContext from "context/TableContext";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CalendarTodayOutlinedIcon from "@material-ui/icons/CalendarTodayOutlined";
-import DurationModal from "../DurationModal/DurationModal";
-import { LAUNCH_FILTERS, DURATION_FILTERS } from "../../lib/constants";
-import filterSvg from "../../assets/svg/filter.svg";
+import DurationModal from "components/DurationModal/DurationModal";
+import { LAUNCH_FILTERS, DURATION_FILTERS } from "lib/constants";
+import filterSvg from "assets/svg/filter.svg";
 import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   select: {

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import TableContext from "../../context/TableContext";
+import TableContext from "context/TableContext";
 import moment from "moment";
 import { withStyles, createStyles, makeStyles } from "@material-ui/core/styles";
 import {
@@ -11,8 +11,8 @@ import {
   TableRow,
   Grid,
 } from "@material-ui/core";
-import ChipHOC from "../Chip/Chip";
-import InfoModal from "../InfoModal/InfoModal";
+import ChipHOC from "components/Chip/Chip";
+import InfoModal from "components/InfoModal/InfoModal";
 import Spinner from "assets/svg/Spinner.svg";
 
 const StyledTableCell = withStyles((theme) =>

@@ -1,14 +1,14 @@
 import React from "react";
 import { Modal, Grid, Paper } from "@material-ui/core";
-import ChipHOC from "../Chip/Chip";
+import ChipHOC from "components/Chip/Chip";
 import moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
 import YouTubeIcon from "@material-ui/icons/YouTube";
 import RedditIcon from "@material-ui/icons/Reddit";
-import Wikipedia from "../../assets/svg/Wikipedia.svg";
+import Wikipedia from "assets/svg/Wikipedia.svg";
 import LanguageIcon from "@material-ui/icons/Language";
-import { unixToutc } from "../../lib/util.js";
+import { unixToutc } from "lib/util.js";
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",

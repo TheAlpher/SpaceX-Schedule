@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Pagination } from "@material-ui/lab";
-import TableContext from "../../context/TableContext";
+import TableContext from "context/TableContext";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() => ({

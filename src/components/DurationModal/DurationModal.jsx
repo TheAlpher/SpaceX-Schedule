@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Grid, Paper } from "@material-ui/core";
-import { DURATION_FILTERS } from "../../lib/constants";
-import RangePicker from "../RangePicker/RangePicker.jsx";
+import { DURATION_FILTERS } from "lib/constants";
+import RangePicker from "components/RangePicker/RangePicker.jsx";
 import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   container: {

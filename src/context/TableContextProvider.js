@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import TableContext from "./TableContext";
-import { validLaunchFilterCheck,validDurationFilterCheck,validDurationRangeFilters } from "../lib/util";
-import { LAUNCH_FILTERS, DURATION_FILTERS } from "../lib/constants";
+import { validLaunchFilterCheck,validDurationFilterCheck } from "lib/util";
+import { LAUNCH_FILTERS, DURATION_FILTERS } from "lib/constants";
 import axios from "axios";
 class TableProvider extends Component {
     /**
