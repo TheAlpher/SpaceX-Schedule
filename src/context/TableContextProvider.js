@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import TableContext from "./TableContext";
-import { validLaunchFilterCheck,validDurationFilterCheck } from "lib/util";
+import { validLaunchFilterCheck,validDurationFilterCheck,validDurationRangeFilters } from "lib/util";
 import { LAUNCH_FILTERS, DURATION_FILTERS } from "lib/constants";
 import axios from "axios";
+import moment from 'moment';
 class TableProvider extends Component {
     /**
      *Initialized state values
@@ -45,6 +46,9 @@ class TableProvider extends Component {
     const optionsObj = {
       limit: this.state.pageSize,
       offset: this.state.pageSize * (this.state.pageNo - 1),
+      sort:{
+          date_unix:'asc',
+      },
       populate: ["launchpad", "payloads", "rocket", "ships"],
     };
     return axios
@@ -60,7 +64,12 @@ class TableProvider extends Component {
           });
           return res.data;
         }
-      });
+      }).catch(err =>{
+        this.setState({
+          data: [],
+          totalDocs: 0,
+        }); 
+      })
   };
 
 /**
@@ -153,24 +162,24 @@ class TableProvider extends Component {
   setDurationFilter = async () => {
     let url = new URL(window.location);
     let durationVal = url.searchParams.get("duration");
-    let durationlt = new Date(Number(url.searchParams.get("lt"))*1000).toISOString(); //lt => less than date filter value
-    let durationgt = new Date(Number(url.searchParams.get("gt"))*1000).toISOString(); //gt => greater than date filter value
- 
+    let durationlt = moment(new Date(Number(url.searchParams.get("lt")))).toISOString(); //lt => less than date filter value
+    let durationgt = moment(new Date(Number(url.searchParams.get("gt")))).toISOString(); //gt => greater than date filter value
+ console.log(durationVal,durationlt,durationgt, DURATION_FILTERS[2]?.lb)
     if (durationVal && validDurationFilterCheck(durationVal)) {
-      if (Object.keys(DURATION_FILTERS))
+      if (Object.keys(DURATION_FILTERS).includes(durationVal))
         this.setState({
           durationFilter: durationVal,
           rangeFrom: DURATION_FILTERS[durationVal]?.lb,
           rangeTo: DURATION_FILTERS[durationVal]?.ub,
         });
-      else if (validLaunchFilterCheck(durationgt, durationlt)) {
-      
+      else if (  validDurationRangeFilters(durationgt, durationlt)) {
         this.setState({
           durationFilter: durationVal,  // durationFilter value == 6 i.e Custom duration filter
           rangeFrom: durationgt,
           rangeTo: durationlt,
         });
       }
+      
     }
     return 0;
   };

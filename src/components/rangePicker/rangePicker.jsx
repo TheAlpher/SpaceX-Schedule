@@ -46,12 +46,12 @@ export default class RangePicker extends React.Component {
         enteredTo: null,
       });
     } else {
-      if (day <= new Date()) {
+      
         this.setState({
           to: day,
           enteredTo: day,
         });
-      }
+      
     }
   }
 
@@ -77,7 +77,7 @@ export default class RangePicker extends React.Component {
     const modifiers = { start: from, end: enteredTo };
     const disabledDays = {
       before: this.state.from,
-      after: this.state.to || new Date(),
+      after: this.state.to ,
     };
     const selectedDays = [from, { from, to: enteredTo }];
     return (
@@ -87,7 +87,7 @@ export default class RangePicker extends React.Component {
           numberOfMonths={2}
           fromMonth={from}
           selectedDays={selectedDays}
-          disabledDays={disabledDays}
+          // disabledDays={disabledDays}
           modifiers={modifiers}
           onDayClick={this.handleDayClick}
           onDayMouseEnter={this.handleDayMouseEnter}
