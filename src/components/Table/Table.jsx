@@ -11,7 +11,7 @@ import {
   TableRow,
   Grid,
 } from "@material-ui/core";
-import ChipHOC from "components/Chip/Chip";
+import ChipHOC from "components/chip/Chip";
 import InfoModal from "components/InfoModal/InfoModal";
 import Spinner from "assets/svg/Spinner.svg";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Grid, Paper } from "@material-ui/core";
-import ChipHOC from "components/Chip/Chip";
+import ChipHOC from "components/chip/Chip";
 import moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
