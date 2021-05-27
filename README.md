@@ -1,8 +1,6 @@
-# SpaceX Dashboard 
+# SpaceX Schedule 
 
-Made as a submission for SpaceX Dashboard Challenge by BigBinary.
-
-By [Piyush Gupta](gupta99piyush@gmail.com)
+View details of all upcoming and previous Spacex launches
 
 ## Installation
 
@@ -43,9 +41,6 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-## Resolution
-
-All Styling specifications were followed as per Figma document. The Application has been styled according to the given dimension - 1440 x 1024
 
 ##  UI Frameworks 
 
