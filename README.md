@@ -2,6 +2,10 @@
 
 View details of all upcoming and previous Spacex launches
 
+## Deployed Demo
+
+https://spacex-dashboard-f59c1.firebaseapp.com
+
 ## Installation
 
 In the project directory, you can run:
